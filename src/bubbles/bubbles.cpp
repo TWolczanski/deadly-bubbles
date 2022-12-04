@@ -16,6 +16,10 @@ Bubbles::~Bubbles() {
     delete[] vertices;
     delete[] modelBuffer;
     delete[] colorBuffer;
+    glDeleteBuffers(1, &sphereVBO);
+    glDeleteBuffers(1, &colorVBO);
+    glDeleteBuffers(1, &modelVBO);
+    glDeleteVertexArrays(1, &VAO);
 }
 
 void Bubbles::setShaders() {
