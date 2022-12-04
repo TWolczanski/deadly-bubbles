@@ -4,6 +4,7 @@
 #include <epoxy/gl.h>
 #include <glm/glm.hpp>
 #include <AGL3Drawable.hpp>
+#include <light.hpp>
 
 class Aquarium : public AGLDrawable
 {
@@ -13,7 +14,7 @@ class Aquarium : public AGLDrawable
 public:
     Aquarium();
     ~Aquarium();
-    void draw(glm::mat4 view, glm::mat4 projection);
+    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, glm::vec3 viewPos);
     
 private:
     void setShaders();

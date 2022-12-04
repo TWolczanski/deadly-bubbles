@@ -47,3 +47,7 @@ void Observer::rotateY(float angle) {
     right = glm::normalize(glm::cross(front, worldUp));
     up = glm::normalize(glm::cross(right, front));
 }
+
+glm::vec3 Observer::getPosition() {
+    return position;
+}

@@ -20,6 +20,7 @@ public:
     void rotateX(float angle);
     void rotateY(float angle);
     glm::mat4 getViewMatrix();
+    glm::vec3 getPosition();
 };
 
 #endif

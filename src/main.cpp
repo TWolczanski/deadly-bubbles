@@ -9,6 +9,8 @@
 #include <aquarium.hpp>
 #include <player.hpp>
 #include <bubbles.hpp>
+#include <light.hpp>
+#include <constants.hpp>
 
 class MyWin : public AGLWindow
 {
@@ -53,6 +55,7 @@ void MyWin::MainLoop()
     const float playerRadius = 1.0 / 5.0 / 6.0;
     fov = 45.0;
     viewport = 1;
+
     Aquarium aquarium;
     Bubbles bubblesLevel1(20, 0.3, 0.02);
     Bubbles bubblesLevel2(35, 0.5, 0.03);
@@ -61,6 +64,16 @@ void MyWin::MainLoop()
     outsideCamera.rotateY(180.0 + 45.0);
     outsideCamera.rotateX(-35.0);
     outsideCamera.moveZ(-1.0);
+
+    PointLight pointLight;
+    pointLight.position = glm::vec3(AQUARIUM_SIZE_X / 2, 0.05f, AQUARIUM_SIZE_Z / 2);
+    pointLight.quadratic = 1.8;
+    pointLight.linear = 0.7;
+    pointLight.constant = 1.0;
+    pointLight.ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+    pointLight.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+    pointLight.specular = glm::vec3(1.0f, 1.0f, 1.0f);
+    pointLight.shininess = 32.0;
 
     double now = glfwGetTime();
     double last = glfwGetTime();
@@ -79,13 +92,13 @@ void MyWin::MainLoop()
         if (viewport == 1) {
             view = player.getViewMatrix();
             projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, playerRadius, 100.0f);
-            aquarium.draw(view, projection);
+            aquarium.draw(view, projection, pointLight, player.getPosition());
         }
         else {
             view = outsideCamera.getViewMatrix();
             projection = glm::ortho(-1.0f * wd / 800, 1.0f * wd / 800, -0.1f * ht / 600, 1.75f * ht / 600, 0.1f, 100.0f);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            aquarium.draw(view, projection);
+            aquarium.draw(view, projection, pointLight, outsideCamera.getPosition());
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             player.draw(view, projection);
         }

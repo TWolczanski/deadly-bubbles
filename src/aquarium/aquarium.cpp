@@ -21,58 +21,106 @@ void Aquarium::setBuffers() {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
+    // float vert[] = {
+    //     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    //      0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    //      0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    //      0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    //     -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    //     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+    //     -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    //      0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    //      0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    //      0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    //     -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+    //     -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+
+    //     -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    //     -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    //     -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    //     -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    //     -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    //     -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+    //      0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+    //      0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+    //      0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+    //      0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+    //      0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+    //      0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+    //     -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+    //      0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+    //      0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    //      0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    //     -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    //     -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+    //     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+    //      0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+    //      0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    //      0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    //     -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    //     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    // };
+
     float vert[] = {
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
 
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, -1.0f,
 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
+        -0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, -1.0f,  0.0f
     };
+
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
     // position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+    // normal
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 }
 
-void Aquarium::draw(glm::mat4 view, glm::mat4 projection) {
+void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, glm::vec3 viewPos) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -87,6 +135,17 @@ void Aquarium::draw(glm::mat4 view, glm::mat4 projection) {
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(view));
     loc = glGetUniformLocation(p(), "projection");
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.position"), 1, &pointLight.position[0]);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.quadratic"), pointLight.quadratic);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.linear"), pointLight.linear);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.constant"), pointLight.constant);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.ambient"), 1, &pointLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.diffuse"), 1, &pointLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.specular"), 1, &pointLight.specular[0]);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.shininess"), pointLight.shininess);
+
+    glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }

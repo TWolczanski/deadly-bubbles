@@ -1,51 +1,45 @@
 #version 330
 
-in vec3 fColor;
-in vec3 fPos;
+in vec3 fragPos;
+in vec3 normal;
 
 out vec3 color;
 
-void main(void) {
-    // the checkerboard is N x N
-    int N = 13;
+struct PointLight {
+    vec3 position;
 
-    if (fPos.z == 0.0 || fPos.z >= 0.999) {
-        int x = int(fPos.x * N);
-        int y = int(fPos.y * N);
-        int index = y * N + x;
-        if (index % 2 == 0) {
-            // color = vec3(0.0, 0.0, 0.0);
-            color = vec3(1.0, 1.0, 1.0);
-        }
-        else {
-            color = vec3(0.0, 0.0, 0.0);
-            // color = fColor;
-        }
-    }
-    else if (fPos.x == 0.0 || fPos.x >= 0.999) {
-        int x = int(fPos.z * N);
-        int y = int(fPos.y * N);
-        int index = y * N + x;
-        if (index % 2 == 0) {
-            color = vec3(0.0, 0.0, 0.0);
-            // color = vec3(1.0, 1.0, 1.0);
-        }
-        else {
-            color = vec3(1.0, 1.0, 1.0);
-            // color = fColor;
-        }
-    }
-    else if (fPos.y == 0.0 || fPos.y >= 1.4999) {
-        int x = int(fPos.z * N);
-        int y = int(fPos.x * N);
-        int index = y * N + x;
-        if (index % 2 == 0) {
-            color = vec3(0.0, 0.0, 0.0);
-            // color = vec3(1.0, 1.0, 1.0);
-        }
-        else {
-            color = vec3(1.0, 1.0, 1.0);
-            // color = fColor;
-        }
-    }
+    // attenuation coefficients
+    float quadratic;
+    float linear;
+    float constant;
+
+    // colors of Phong components
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float shininess;
+};
+
+uniform vec3 viewPos;
+uniform PointLight pointLight;
+
+vec3 computePointLight(PointLight light) {
+    vec3 N = normalize(normal);
+    vec3 L = normalize(light.position - fragPos);
+    vec3 R = normalize(reflect(-L, N));
+    vec3 V = normalize(viewPos - light.position);
+    float d = length(L);
+    float attenuation = 1.0 / (light.quadratic * d * d + light.linear * d + light.constant);
+    vec3 materialColor = vec3(0.0, 0.0, 1.0);
+
+    vec3 ambient = light.ambient * materialColor * attenuation;
+    vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * materialColor * attenuation;
+    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), light.shininess) * materialColor * attenuation;
+
+    return ambient + diffuse + specular;
+}
+
+void main(void) {
+    color = computePointLight(pointLight);
 }
