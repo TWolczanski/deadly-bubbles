@@ -16,11 +16,14 @@ class Bubbles : public AGLDrawable
     const float maxRadius;
     glm::vec3 *positions;
     float *radii;
-    glm::mat4 *models;
+    glm::vec3 *colors;
+    glm::vec3 *colorBuffer;
+    glm::mat4 *modelBuffer;
     float *vertices;
     int vertCount;
     GLuint VAO;
     GLuint sphereVBO;
+    GLuint colorVBO;
     GLuint modelVBO;
 public:
     Bubbles(int count, float speed, float growthRate);

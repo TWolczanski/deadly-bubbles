@@ -12,8 +12,10 @@ Bubbles::Bubbles(int count, float speed, float growthRate) : count(count), speed
 Bubbles::~Bubbles() {
     delete[] positions;
     delete[] radii;
-    delete[] models;
+    delete[] colors;
     delete[] vertices;
+    delete[] modelBuffer;
+    delete[] colorBuffer;
 }
 
 void Bubbles::setShaders() {
@@ -26,6 +28,18 @@ void Bubbles::setBuffers()
     glBindVertexArray(VAO);
 
     genSphereVertices(&vertices, &vertCount);
+    positions = new glm::vec3[count];
+    radii = new float[count];
+    colors = new glm::vec3[count];
+    colorBuffer = new glm::vec3[count];
+    modelBuffer = new glm::mat4[count];
+    for (int i = 0; i < count; i++) {
+        positions[i] = glm::vec3(0.0f, AQUARIUM_SIZE_Y + 1, 0.0f);
+        radii[i] = 0.0;
+        colors[i] = glm::vec3(0.0f);
+        modelBuffer[i] = glm::mat4(1.0f);
+        colorBuffer[i] = glm::vec3(0.0f);
+    }
 
     glGenBuffers(1, &sphereVBO);
     glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
@@ -33,32 +47,30 @@ void Bubbles::setBuffers()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
-    positions = new glm::vec3[count];
-    radii = new float[count];
-    models = new glm::mat4[count];
-    for (int i = 0; i < count; i++) {
-        positions[i] = glm::vec3(0.0f, AQUARIUM_SIZE_Y + 1, 0.0f);
-        radii[i] = 0.0;
-        models[i] = glm::mat4(1.0f);
-    }
+    glGenBuffers(1, &colorVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::vec3), &colorBuffer[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
     glGenBuffers(1, &modelVBO);
     glBindBuffer(GL_ARRAY_BUFFER, modelVBO);
-    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &modelBuffer[0], GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)0);
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(1 * sizeof(glm::vec4)));
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)0);
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(2 * sizeof(glm::vec4)));
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(1 * sizeof(glm::vec4)));
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(3 * sizeof(glm::vec4)));
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(2 * sizeof(glm::vec4)));
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(glm::vec4), (void *)(3 * sizeof(glm::vec4)));
 
     glVertexAttribDivisor(1, 1);
     glVertexAttribDivisor(2, 1);
     glVertexAttribDivisor(3, 1);
     glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
 }
 
 void Bubbles::draw(glm::mat4 view, glm::mat4 projection, double time, double timeDelta) {
@@ -74,6 +86,7 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, double time, double tim
         float z = ((float)rand() / (RAND_MAX / (AQUARIUM_SIZE_Z - maxRadius - maxRadius))) + maxRadius;
         positions[index] = glm::vec3(x, r, z);
         radii[index] = r;
+        colors[index] = glm::vec3((float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX);
         created = true;
     }
 
@@ -85,17 +98,20 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, double time, double tim
         }
         // only the bubbles that haven't made it to the top of the aquarium are drawn
         if (positions[i].y + radii[i] < AQUARIUM_SIZE_Y) {
+            colorBuffer[j] = colors[i];
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, positions[i]);
             model = glm::scale(model, glm::vec3(radii[i], radii[i], radii[i]));
-            models[j] = model;
+            modelBuffer[j] = model;
             j++;
         }
     }
     int instanceCount = j;
 
+    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, instanceCount * sizeof(glm::vec3), &colorBuffer[0]);
     glBindBuffer(GL_ARRAY_BUFFER, modelVBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, instanceCount * sizeof(glm::mat4), &models[0]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, instanceCount * sizeof(glm::mat4), &modelBuffer[0]);
 
     GLint loc;
     loc = glGetUniformLocation(p(), "view");
