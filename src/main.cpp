@@ -67,8 +67,8 @@ void MyWin::MainLoop()
 
     PointLight pointLight;
     pointLight.position = glm::vec3(AQUARIUM_SIZE_X / 2, 0.05f, AQUARIUM_SIZE_Z / 2);
-    pointLight.quadratic = 1.8;
-    pointLight.linear = 0.7;
+    pointLight.quadratic = 0.20;
+    pointLight.linear = 0.22;
     pointLight.constant = 1.0;
     pointLight.ambient = glm::vec3(0.2f, 0.2f, 0.2f);
     pointLight.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -93,6 +93,12 @@ void MyWin::MainLoop()
             view = player.getViewMatrix();
             projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, playerRadius, 100.0f);
             aquarium.draw(view, projection, pointLight, player.getPosition());
+            if (player.level == 1) {
+                bubblesLevel1.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+            }
+            else if (player.level == 2) {
+                bubblesLevel2.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+            }
         }
         else {
             view = outsideCamera.getViewMatrix();
@@ -101,12 +107,12 @@ void MyWin::MainLoop()
             aquarium.draw(view, projection, pointLight, outsideCamera.getPosition());
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             player.draw(view, projection);
-        }
-        if (player.level == 1) {
-            bubblesLevel1.draw(view, projection, now, now - last);
-        }
-        else if (player.level == 2) {
-            bubblesLevel2.draw(view, projection, now, now - last);
+            if (player.level == 1) {
+                bubblesLevel1.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+            }
+            else if (player.level == 2) {
+                bubblesLevel2.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+            }
         }
         
         AGLErrors("main-afterdraw");
