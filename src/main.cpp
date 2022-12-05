@@ -5,6 +5,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <AGL3Window.hpp>
 #include <aquarium.hpp>
 #include <player.hpp>
@@ -65,15 +66,24 @@ void MyWin::MainLoop()
     outsideCamera.rotateX(-35.0);
     outsideCamera.moveZ(-1.0);
 
-    PointLight pointLight;
-    pointLight.position = glm::vec3(AQUARIUM_SIZE_X / 2, 0.05f, AQUARIUM_SIZE_Z / 2);
-    pointLight.quadratic = 0.20;
-    pointLight.linear = 0.22;
-    pointLight.constant = 1.0;
-    pointLight.ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-    pointLight.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
-    pointLight.specular = glm::vec3(1.0f, 1.0f, 1.0f);
-    pointLight.shininess = 32.0;
+    PointLight pointLights[9];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            int index = 3 * i + j;
+            float dx = AQUARIUM_SIZE_X / 3;
+            float dz = AQUARIUM_SIZE_Z / 3;
+            // pointLights[index].position = glm::vec3(((float)rand() / RAND_MAX) * AQUARIUM_SIZE_X, ((float)rand() / RAND_MAX) * AQUARIUM_SIZE_Y, ((float)rand() / RAND_MAX) * AQUARIUM_SIZE_Z);
+            pointLights[index].position = glm::vec3((float)i * dx + dx / 2, 0.05f, (float)j * dz + dz / 2);
+            pointLights[index].quadratic = 0.20;
+            pointLights[index].linear = 0.22;
+            pointLights[index].constant = 1.0;
+            pointLights[index].ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+            pointLights[index].diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+            pointLights[index].specular = glm::vec3(1.0f, 1.0f, 1.0f);
+        }
+    }
+
+    std::cout << glm::to_string(pointLights[4].position) << std::endl;
 
     double now = glfwGetTime();
     double last = glfwGetTime();
@@ -92,26 +102,26 @@ void MyWin::MainLoop()
         if (viewport == 1) {
             view = player.getViewMatrix();
             projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, playerRadius, 100.0f);
-            aquarium.draw(view, projection, pointLight, player.getPosition());
+            aquarium.draw(view, projection, pointLights, 9, player.getPosition());
             if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+                bubblesLevel1.draw(view, projection, pointLights[4], player.getPosition(), now, now - last);
             }
             else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+                bubblesLevel2.draw(view, projection, pointLights[4], player.getPosition(), now, now - last);
             }
         }
         else {
             view = outsideCamera.getViewMatrix();
             projection = glm::ortho(-1.0f * wd / 800, 1.0f * wd / 800, -0.1f * ht / 600, 1.75f * ht / 600, 0.1f, 100.0f);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            aquarium.draw(view, projection, pointLight, outsideCamera.getPosition());
+            aquarium.draw(view, projection, pointLights, 9, outsideCamera.getPosition());
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             player.draw(view, projection);
             if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+                bubblesLevel1.draw(view, projection, pointLights[4], player.getPosition(), now, now - last);
             }
             else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, player.getPosition(), now, now - last);
+                bubblesLevel2.draw(view, projection, pointLights[4], player.getPosition(), now, now - last);
             }
         }
         

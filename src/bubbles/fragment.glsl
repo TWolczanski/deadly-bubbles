@@ -18,8 +18,6 @@ struct PointLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-
-    float shininess;
 };
 
 uniform vec3 viewPos;
@@ -35,7 +33,7 @@ vec3 computePointLight(PointLight light) {
 
     vec3 ambient = light.ambient * fragColor * attenuation;
     vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * fragColor * attenuation;
-    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), light.shininess) * vec3(1.0, 1.0, 1.0) * attenuation;
+    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 70.0) * fragColor * attenuation;
 
     return ambient + diffuse + specular;
 }

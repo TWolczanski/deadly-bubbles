@@ -130,7 +130,6 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, 
     glUniform3fv(glGetUniformLocation(p(), "pointLight.ambient"), 1, &pointLight.ambient[0]);
     glUniform3fv(glGetUniformLocation(p(), "pointLight.diffuse"), 1, &pointLight.diffuse[0]);
     glUniform3fv(glGetUniformLocation(p(), "pointLight.specular"), 1, &pointLight.specular[0]);
-    glUniform1f(glGetUniformLocation(p(), "pointLight.shininess"), pointLight.shininess);
 
     glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
 
