@@ -77,7 +77,7 @@ void Bubbles::setBuffers()
     glVertexAttribDivisor(5, 1);
 }
 
-void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, glm::vec3 viewPos, double time, double timeDelta) {
+void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos, double time, double timeDelta) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -130,6 +130,11 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, 
     glUniform3fv(glGetUniformLocation(p(), "pointLight.ambient"), 1, &pointLight.ambient[0]);
     glUniform3fv(glGetUniformLocation(p(), "pointLight.diffuse"), 1, &pointLight.diffuse[0]);
     glUniform3fv(glGetUniformLocation(p(), "pointLight.specular"), 1, &pointLight.specular[0]);
+
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.direction"), 1, &directionalLight.direction[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.ambient"), 1, &directionalLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.diffuse"), 1, &directionalLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.specular"), 1, &directionalLight.specular[0]);
 
     glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
 

@@ -29,7 +29,7 @@ class Bubbles : public AGLDrawable
 public:
     Bubbles(int count, float speed, float growthRate);
     ~Bubbles();
-    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, glm::vec3 viewPos, double time, double timeDelta);
+    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos, double time, double timeDelta);
     friend bool collision(Player &player, Bubbles &bubbles);
 
 private:
