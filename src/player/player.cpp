@@ -116,7 +116,7 @@ void Player::setBuffers() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 }
 
-void Player::draw(glm::mat4 view, glm::mat4 projection) {
+void Player::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -130,6 +130,21 @@ void Player::draw(glm::mat4 view, glm::mat4 projection) {
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(view));
     loc = glGetUniformLocation(p(), "projection");
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(projection));
+    
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.position"), 1, &pointLight.position[0]);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.quadratic"), pointLight.quadratic);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.linear"), pointLight.linear);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.constant"), pointLight.constant);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.ambient"), 1, &pointLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.diffuse"), 1, &pointLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.specular"), 1, &pointLight.specular[0]);
+
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.direction"), 1, &directionalLight.direction[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.ambient"), 1, &directionalLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.diffuse"), 1, &directionalLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "directionalLight.specular"), 1, &directionalLight.specular[0]);
+
+    glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, vertCount);
 }

@@ -14,5 +14,6 @@ void main(void) {
     gl_Position = model * vec4(Pos, 1.0);
     fragPos = gl_Position.xyz;
     gl_Position = projection * view * gl_Position;
-    normal = Normal;
+    normal = vec3(model * vec4(Normal, 0.0));
+    //normal = Normal;
 }

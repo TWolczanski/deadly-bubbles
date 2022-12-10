@@ -12,9 +12,8 @@ uniform mat4 view;
 uniform mat4 projection;
 
 void main(void) {
-    gl_Position = model * vec4(pos, 1.0);
-    fragPos = gl_Position.xyz;
-    normal = gl_Position.xyz;
+    fragPos = vec3(model * vec4(pos, 1.0));
+    normal = vec3(model * vec4(pos, 0.0));
     fragColor = color;
-    gl_Position = projection * view * gl_Position;
+    gl_Position = projection * view * model * vec4(pos, 1.0);
 }

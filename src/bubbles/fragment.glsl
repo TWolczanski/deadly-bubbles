@@ -62,6 +62,6 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 }
 
 void main(void) {
-    color = computePointLight(pointLight);
-    // color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
+    // color = computePointLight(pointLight);
+    color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
 }

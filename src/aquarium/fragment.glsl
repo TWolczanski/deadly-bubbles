@@ -29,7 +29,7 @@ struct DirectionalLight {
 };
 
 uniform vec3 viewPos;
-uniform PointLight pointLights[9];
+uniform PointLight pointLight;
 uniform DirectionalLight directionalLight;
 
 vec3 computePointLight(PointLight light) {
@@ -45,7 +45,7 @@ vec3 computePointLight(PointLight light) {
     vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * materialColor * attenuation;
     vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 32.0) * materialColor * attenuation;
 
-    return ambient + diffuse + specular;
+    return ambient + diffuse;
 }
 
 vec3 computeDirectionalLight(DirectionalLight light) {
@@ -63,10 +63,6 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 }
 
 void main(void) {
-    // color = vec3(0.0);
-    color = computePointLight(pointLights[4]);
-    // color = computeDirectionalLight(directionalLight);
-    // for (int i = 0; i < 9; i++) {
-    //     color += computePointLight(pointLights[i]);
-    // }
+    //color = computePointLight(pointLight);
+    color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
 }

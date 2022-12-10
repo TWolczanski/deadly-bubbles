@@ -21,50 +21,6 @@ void Aquarium::setBuffers() {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    // float vert[] = {
-    //     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    //      0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    //      0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    //      0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    //     -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-    //     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-    //     -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-    //      0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-    //      0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-    //      0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-    //     -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-    //     -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-
-    //     -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    //     -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    //     -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    //     -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    //     -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    //     -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-    //      0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-    //      0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-    //      0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-    //      0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-    //      0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-    //      0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-    //     -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-    //      0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-    //      0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    //      0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    //     -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    //     -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-    //     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-    //      0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-    //      0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    //      0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    //     -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    //     -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-    // };
-
     float vert[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
@@ -120,7 +76,7 @@ void Aquarium::setBuffers() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 }
 
-void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLights[], int pointLightCount, DirectionalLight directionalLight, glm::vec3 viewPos) {
+void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -136,15 +92,13 @@ void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLights
     loc = glGetUniformLocation(p(), "projection");
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(projection));
 
-    for (int i = 0; i < pointLightCount; i++) {
-        glUniform3fv(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].position")).c_str()), 1, &(pointLights[i].position)[0]);
-        glUniform1f(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].quadratic")).c_str()), pointLights[i].quadratic);
-        glUniform1f(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].linear")).c_str()), pointLights[i].linear);
-        glUniform1f(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].constant")).c_str()), pointLights[i].constant);
-        glUniform3fv(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].ambient")).c_str()), 1, &(pointLights[i].ambient)[0]);
-        glUniform3fv(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].diffuse")).c_str()), 1, &(pointLights[i].diffuse)[0]);
-        glUniform3fv(glGetUniformLocation(p(), (std::string("pointLights[") + std::to_string(i) + std::string("].specular")).c_str()), 1, &(pointLights[i].specular)[0]);
-    }
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.position"), 1, &pointLight.position[0]);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.quadratic"), pointLight.quadratic);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.linear"), pointLight.linear);
+    glUniform1f(glGetUniformLocation(p(), "pointLight.constant"), pointLight.constant);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.ambient"), 1, &pointLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.diffuse"), 1, &pointLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "pointLight.specular"), 1, &pointLight.specular[0]);
 
     glUniform3fv(glGetUniformLocation(p(), "directionalLight.direction"), 1, &directionalLight.direction[0]);
     glUniform3fv(glGetUniformLocation(p(), "directionalLight.ambient"), 1, &directionalLight.ambient[0]);
