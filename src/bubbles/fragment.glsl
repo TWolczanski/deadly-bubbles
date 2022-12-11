@@ -43,7 +43,7 @@ vec3 computePointLight(PointLight light) {
 
     vec3 ambient = light.ambient * fragColor * attenuation;
     vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * fragColor * attenuation;
-    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 70.0) * fragColor * attenuation;
+    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 32.0) * fragColor * attenuation;
 
     return ambient + diffuse + specular;
 }
@@ -56,7 +56,7 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 
     vec3 ambient = light.ambient * fragColor;
     vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * fragColor;
-    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 70.0) * fragColor;
+    vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 32.0) * fragColor;
 
     return ambient + diffuse + specular;
 }

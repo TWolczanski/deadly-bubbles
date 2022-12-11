@@ -67,7 +67,7 @@ void MyWin::MainLoop()
     outsideCamera.moveZ(-1.0);
 
     PointLight pointLight;
-    pointLight.position = glm::vec3(AQUARIUM_SIZE_X / 2, AQUARIUM_SIZE_Y - 0.05f, AQUARIUM_SIZE_Z / 2);
+    pointLight.position = glm::vec3(AQUARIUM_SIZE_X - 0.3f, 0.05f, AQUARIUM_SIZE_Z / 2);
     pointLight.quadratic = 0.20;
     pointLight.linear = 0.22;
     pointLight.constant = 1.0;
