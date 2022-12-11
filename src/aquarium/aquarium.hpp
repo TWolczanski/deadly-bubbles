@@ -14,7 +14,7 @@ class Aquarium : public AGLDrawable
 public:
     Aquarium();
     ~Aquarium();
-    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos);
+    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, PointLight playerLight, glm::vec3 viewPos);
     
 private:
     void setShaders();

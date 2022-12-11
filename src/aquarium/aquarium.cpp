@@ -121,7 +121,7 @@ void Aquarium::setBuffers() {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 }
 
-void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos) {
+void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, PointLight playerLight, glm::vec3 viewPos) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -149,6 +149,14 @@ void Aquarium::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight,
     glUniform3fv(glGetUniformLocation(p(), "directionalLight.ambient"), 1, &directionalLight.ambient[0]);
     glUniform3fv(glGetUniformLocation(p(), "directionalLight.diffuse"), 1, &directionalLight.diffuse[0]);
     glUniform3fv(glGetUniformLocation(p(), "directionalLight.specular"), 1, &directionalLight.specular[0]);
+
+    glUniform3fv(glGetUniformLocation(p(), "playerLight.position"), 1, &playerLight.position[0]);
+    glUniform1f(glGetUniformLocation(p(), "playerLight.quadratic"), playerLight.quadratic);
+    glUniform1f(glGetUniformLocation(p(), "playerLight.linear"), playerLight.linear);
+    glUniform1f(glGetUniformLocation(p(), "playerLight.constant"), playerLight.constant);
+    glUniform3fv(glGetUniformLocation(p(), "playerLight.ambient"), 1, &playerLight.ambient[0]);
+    glUniform3fv(glGetUniformLocation(p(), "playerLight.diffuse"), 1, &playerLight.diffuse[0]);
+    glUniform3fv(glGetUniformLocation(p(), "playerLight.specular"), 1, &playerLight.specular[0]);
 
     glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
 

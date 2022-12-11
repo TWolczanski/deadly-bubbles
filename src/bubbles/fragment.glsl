@@ -32,6 +32,7 @@ struct DirectionalLight {
 uniform vec3 viewPos;
 uniform PointLight pointLight;
 uniform DirectionalLight directionalLight;
+uniform PointLight playerLight;
 
 vec3 computePointLight(PointLight light) {
     vec3 N = normalize(normal);
@@ -62,7 +63,8 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 }
 
 void main(void) {
-    color = computePointLight(pointLight);
+    color = computePointLight(pointLight) + computePointLight(playerLight);
+    // color = computePointLight(pointLight);
     // color = computeDirectionalLight(directionalLight);
     // color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
 }

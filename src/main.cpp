@@ -81,6 +81,15 @@ void MyWin::MainLoop()
     directionalLight.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
     directionalLight.specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
+    PointLight playerLight;
+    playerLight.position = player.getPosition();
+    playerLight.quadratic = 3.0;
+    playerLight.linear = 1.5;
+    playerLight.constant = 1.0;
+    playerLight.ambient = glm::vec3(0.2f, 0.0f, 0.0f);
+    playerLight.diffuse = glm::vec3(1.0f, 0.0f, 0.0f);
+    playerLight.specular = glm::vec3(1.0f, 0.0f, 0.0f);
+
     double now = glfwGetTime();
     double last = glfwGetTime();
 
@@ -90,6 +99,7 @@ void MyWin::MainLoop()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         glm::mat4 view, projection;
+        playerLight.position = player.getPosition();
         now = glfwGetTime();
 
         AGLErrors("main-loopbegin");
@@ -98,12 +108,12 @@ void MyWin::MainLoop()
         if (viewport == 1) {
             view = player.getViewMatrix();
             projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, playerRadius, 100.0f);
-            aquarium.draw(view, projection, pointLight, directionalLight, player.getPosition());
+            aquarium.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition());
             if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, directionalLight, player.getPosition(), now, now - last);
+                bubblesLevel1.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition(), now, now - last);
             }
             else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, directionalLight, player.getPosition(), now, now - last);
+                bubblesLevel2.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition(), now, now - last);
             }
         }
         else {
@@ -111,14 +121,14 @@ void MyWin::MainLoop()
             projection = glm::ortho(-1.0f * wd / 800, 1.0f * wd / 800, -0.1f * ht / 600, 1.75f * ht / 600, 0.1f, 100.0f);
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);
-            aquarium.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
+            aquarium.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition());
             glDisable(GL_CULL_FACE);
             player.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
             if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition(), now, now - last);
+                bubblesLevel1.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition(), now, now - last);
             }
             else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition(), now, now - last);
+                bubblesLevel2.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition(), now, now - last);
             }
         }
         
