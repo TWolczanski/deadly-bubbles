@@ -37,8 +37,8 @@ vec3 computePointLight(PointLight light) {
     vec3 L = normalize(light.position - fragPos);
     vec3 R = normalize(reflect(-L, N));
     vec3 V = normalize(viewPos - fragPos);
-    float d = length(L);
-    float attenuation = 1.0 / (light.quadratic * d * d + light.linear * d + light.constant);
+    float d = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.quadratic * (d * d) + light.linear * d + light.constant);
     vec3 materialColor = vec3(0.0, 0.0, 1.0);
 
     vec3 ambient = light.ambient * materialColor * attenuation;
@@ -59,10 +59,11 @@ vec3 computeDirectionalLight(DirectionalLight light) {
     vec3 diffuse = light.diffuse * max(dot(N, L), 0.0) * materialColor;
     vec3 specular = light.specular * pow(max(dot(R, V), 0.0), 32.0) * materialColor;
 
-    return ambient + diffuse + specular;
+    return ambient + diffuse;
 }
 
 void main(void) {
-    //color = computePointLight(pointLight);
-    color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
+    color = computePointLight(pointLight);
+    // color = computeDirectionalLight(directionalLight);
+    // color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);
 }
