@@ -109,15 +109,16 @@ void MyWin::MainLoop()
         else {
             view = outsideCamera.getViewMatrix();
             projection = glm::ortho(-1.0f * wd / 800, 1.0f * wd / 800, -0.1f * ht / 600, 1.75f * ht / 600, 0.1f, 100.0f);
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_FRONT);
             aquarium.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            player.draw(view, projection, pointLight, directionalLight, player.getPosition());
+            glDisable(GL_CULL_FACE);
+            player.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
             if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, directionalLight, player.getPosition(), now, now - last);
+                bubblesLevel1.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition(), now, now - last);
             }
             else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, directionalLight, player.getPosition(), now, now - last);
+                bubblesLevel2.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition(), now, now - last);
             }
         }
         
