@@ -53,14 +53,17 @@ void MyWin::MainLoop()
 {
     glEnable(GL_DEPTH_TEST);
 
-    const float playerRadius = 1.0 / 5.0 / 6.0;
     fov = 45.0;
     viewport = 1;
 
     Aquarium aquarium;
+
     Bubbles bubblesLevel1(20, 0.3, 0.02);
     Bubbles bubblesLevel2(35, 0.5, 0.03);
-    Player player(playerRadius);
+    Bubbles *bubbles = &bubblesLevel1;
+
+    Player player(1.0 / 30.0);
+
     Observer outsideCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     outsideCamera.rotateY(180.0 + 45.0);
     outsideCamera.rotateX(-35.0);
@@ -90,6 +93,8 @@ void MyWin::MainLoop()
     playerLight.diffuse = glm::vec3(1.0f, 0.0f, 0.0f);
     playerLight.specular = glm::vec3(1.0f, 0.0f, 0.0f);
 
+    PointLight bubbleLights[SPECIAL_BUBBLES_COUNT];
+
     double now = glfwGetTime();
     double last = glfwGetTime();
 
@@ -100,6 +105,7 @@ void MyWin::MainLoop()
         
         glm::mat4 view, projection;
         playerLight.position = player.getPosition();
+        updateBubbleLights(bubbleLights, *bubbles);
         now = glfwGetTime();
 
         AGLErrors("main-loopbegin");
@@ -107,14 +113,9 @@ void MyWin::MainLoop()
         ViewportOne(0, 0, wd, ht);
         if (viewport == 1) {
             view = player.getViewMatrix();
-            projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, playerRadius, 100.0f);
+            projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, 0.0001f, 100.0f);
             aquarium.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition());
-            if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition(), now, now - last);
-            }
-            else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition(), now, now - last);
-            }
+            (*bubbles).draw(view, projection, pointLight, directionalLight, playerLight, bubbleLights, player.getPosition(), now, now - last);
         }
         else {
             view = outsideCamera.getViewMatrix();
@@ -124,12 +125,7 @@ void MyWin::MainLoop()
             aquarium.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition());
             glDisable(GL_CULL_FACE);
             player.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
-            if (player.level == 1) {
-                bubblesLevel1.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition(), now, now - last);
-            }
-            else if (player.level == 2) {
-                bubblesLevel2.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition(), now, now - last);
-            }
+            (*bubbles).draw(view, projection, pointLight, directionalLight, playerLight, bubbleLights, outsideCamera.getPosition(), now, now - last);
         }
         
         AGLErrors("main-afterdraw");
@@ -138,16 +134,17 @@ void MyWin::MainLoop()
         glfwPollEvents();
         // glfwWaitEvents();
 
-        if (player.level == 1) {
-            player.handleInput(win(), now - last, bubblesLevel1);
-        }
-        else if (player.level == 2) {
-            player.handleInput(win(), now - last, bubblesLevel2);
-        }
+        player.handleInput(win(), now - last, *bubbles);
 
         if (player.level == 0) {
             std::cout << "You've touched a deadly bubble! Game time: " << now << std::endl;
             break;
+        }
+        else if (player.level == 1) {
+            bubbles = &bubblesLevel1;
+        }
+        else if (player.level == 2) {
+            bubbles = &bubblesLevel2;
         }
         else if (player.level == 3) {
             std::cout << "Congratulations! It took you " << now << "s to twice get through to the other side of the aquarium." << std::endl;

@@ -3,6 +3,7 @@
 #include <constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <algorithm>
 
 Bubbles::Bubbles(int count, float speed, float growthRate) : count(count), speed(speed), growthRate(growthRate), maxRadius(0.1) {
     setShaders();
@@ -75,9 +76,20 @@ void Bubbles::setBuffers()
     glVertexAttribDivisor(3, 1);
     glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
+
+    // generate indices of special bubbles
+    int *indices = new int[count];
+    for (int i = 0; i < count; i++) {
+        indices[i] = i;
+    }
+    std::random_shuffle(indices, indices + count);
+    for (int i = 0; i < SPECIAL_BUBBLES_COUNT; i++) {
+        special[i] = indices[i];
+    }
+    delete[] indices;
 }
 
-void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, PointLight playerLight, glm::vec3 viewPos, double time, double timeDelta) {
+void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, PointLight playerLight, PointLight bubbleLights[], glm::vec3 viewPos, double time, double timeDelta) {
     bindProgram();
     glBindVertexArray(VAO);
 
@@ -144,7 +156,19 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, 
     glUniform3fv(glGetUniformLocation(p(), "playerLight.diffuse"), 1, &playerLight.diffuse[0]);
     glUniform3fv(glGetUniformLocation(p(), "playerLight.specular"), 1, &playerLight.specular[0]);
 
+    for (int i = 0; i < SPECIAL_BUBBLES_COUNT; i++) {
+        glUniform3fv(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].position")).c_str()), 1, &(bubbleLights[i].position[0]));
+        glUniform1f(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].quadratic")).c_str()), bubbleLights[i].quadratic);
+        glUniform1f(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].linear")).c_str()), bubbleLights[i].linear);
+        glUniform1f(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].constant")).c_str()), bubbleLights[i].constant);
+        glUniform3fv(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].ambient")).c_str()), 1, &(bubbleLights[i].ambient[0]));
+        glUniform3fv(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].diffuse")).c_str()), 1, &(bubbleLights[i].diffuse[0]));
+        glUniform3fv(glGetUniformLocation(p(), (std::string("bubbleLights[") + std::to_string(i) + std::string("].specular")).c_str()), 1, &(bubbleLights[i].specular[0]));
+    }
+
     glUniform3fv(glGetUniformLocation(p(), "viewPos"), 1, &viewPos[0]);
+
+    glUniform1iv(glGetUniformLocation(p(), "special"), SPECIAL_BUBBLES_COUNT, special);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, vertCount, instanceCount);
 }

@@ -3,6 +3,7 @@
 in vec3 fragColor;
 in vec3 fragPos;
 in vec3 normal;
+flat in int instance;
 
 out vec3 color;
 
@@ -34,6 +35,10 @@ uniform PointLight pointLight;
 uniform DirectionalLight directionalLight;
 uniform PointLight playerLight;
 
+#define SPECIAL_BUBBLES_COUNT 7
+uniform int special[SPECIAL_BUBBLES_COUNT];
+uniform PointLight bubbleLights[SPECIAL_BUBBLES_COUNT];
+
 vec3 computePointLight(PointLight light) {
     vec3 N = normalize(normal);
     vec3 L = normalize(light.position - fragPos);
@@ -64,6 +69,19 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 
 void main(void) {
     color = computePointLight(pointLight) + computePointLight(playerLight);
+    
+    // for (int i = 0; i < SPECIAL_BUBBLES_COUNT; i++) {
+    //     if (special[i] < instance) {
+    //         color = fragColor;
+    //         return;
+    //     }
+    // }
+    // for (int i = 0; i < SPECIAL_BUBBLES_COUNT; i++) {
+    //     vec3 c = color + computePointLight(bubbleLights[i]);
+    //     if (c.r < 1.0 && c.g < 1.0 && c.b < 1.0) {
+    //         color = c;
+    //     }
+    // }
     // color = computePointLight(pointLight);
     // color = computeDirectionalLight(directionalLight);
     // color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);

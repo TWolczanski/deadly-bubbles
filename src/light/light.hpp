@@ -2,6 +2,9 @@
 #define LIGHT_H
 
 #include <glm/glm.hpp>
+#include <bubbles.hpp>
+
+class Bubbles;
 
 struct PointLight
 {
@@ -27,5 +30,7 @@ struct DirectionalLight
     glm::vec3 diffuse;
     glm::vec3 specular;
 };
+
+void updateBubbleLights(PointLight bubbleLights[], Bubbles &bubbles);
 
 #endif

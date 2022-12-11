@@ -10,6 +10,8 @@
 #include <light.hpp>
 
 class Bubbles;
+struct PointLight;
+struct DirectionalLight;
 
 class Player : public Observer, public AGLDrawable
 {
