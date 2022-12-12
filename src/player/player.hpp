@@ -10,16 +10,16 @@
 #include <light.hpp>
 
 class Bubbles;
-struct PointLight;
-struct DirectionalLight;
 
 class Player : public Observer, public AGLDrawable
 {
     const float radius;
     const float movSpeed;
     const float rotSpeed;
+
     double mouseX;
     double mouseY;
+
     float *vertices;
     int vertCount;
     GLuint VAO;
@@ -32,7 +32,7 @@ public:
     Player();
     ~Player();
     void handleInput(GLFWwindow *window, float timeDelta, Bubbles &bubbles);
-    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos);
+    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, glm::vec3 viewPos);
     friend bool collision(Player &player, Bubbles &bubbles);
 
 private:

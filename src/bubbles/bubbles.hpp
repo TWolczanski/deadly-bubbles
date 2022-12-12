@@ -9,8 +9,6 @@
 #include <constants.hpp>
 
 class Player;
-struct PointLight;
-struct DirectionalLight;
 
 class Bubbles : public AGLDrawable
 {
@@ -22,7 +20,6 @@ class Bubbles : public AGLDrawable
     glm::vec3 *positions;
     float *radii;
     glm::vec3 *colors;
-    int special[SPECIAL_BUBBLES_COUNT];
 
     glm::vec3 *colorBuffer;
     glm::mat4 *modelBuffer;
@@ -36,9 +33,8 @@ class Bubbles : public AGLDrawable
 public:
     Bubbles(int count, float speed, float growthRate);
     ~Bubbles();
-    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, PointLight playerLight, PointLight bubbleLights[], glm::vec3 viewPos, double time, double timeDelta);
+    void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, PointLight playerLight, glm::vec3 viewPos, double time, double timeDelta);
     friend bool collision(Player &player, Bubbles &bubbles);
-    friend void updateBubbleLights(PointLight bubbleLights[], Bubbles &bubbles);
 
 private:
     void setShaders();
