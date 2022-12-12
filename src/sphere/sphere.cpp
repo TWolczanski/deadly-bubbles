@@ -6,16 +6,16 @@ void genSphereVertices(float **vertices, int *count)
 {
     // octahedron
     float vert[] = {
+         0.0f,  1.0f,  0.0f,
         -1.0f,  0.0f,  0.0f,
-         0.0f,  1.0f,  0.0f,
          0.0f,  0.0f, -1.0f,
 
          1.0f,  0.0f,  0.0f,
          0.0f,  1.0f,  0.0f,
          0.0f,  0.0f, -1.0f,
 
-         1.0f,  0.0f,  0.0f,
          0.0f,  1.0f,  0.0f,
+         1.0f,  0.0f,  0.0f,
          0.0f,  0.0f,  1.0f,
 
         -1.0f,  0.0f,  0.0f,
@@ -26,16 +26,16 @@ void genSphereVertices(float **vertices, int *count)
          0.0f, -1.0f,  0.0f,
          0.0f,  0.0f, -1.0f,
 
-         1.0f,  0.0f,  0.0f,
          0.0f, -1.0f,  0.0f,
+         1.0f,  0.0f,  0.0f,
          0.0f,  0.0f, -1.0f,
 
          1.0f,  0.0f,  0.0f,
          0.0f, -1.0f,  0.0f,
          0.0f,  0.0f,  1.0f,
 
-        -1.0f,  0.0f,  0.0f,
          0.0f, -1.0f,  0.0f,
+        -1.0f,  0.0f,  0.0f,
          0.0f,  0.0f,  1.0f,
     };
 
@@ -68,20 +68,20 @@ void genSphereVertices(float **vertices, int *count)
             normalizePoint(p6);
 
             vertQueue.push_back(p1);
-            vertQueue.push_back(p4);
             vertQueue.push_back(p5);
+            vertQueue.push_back(p4);
 
             vertQueue.push_back(p4);
+            vertQueue.push_back(p6);
             vertQueue.push_back(p2);
-            vertQueue.push_back(p6);
 
             vertQueue.push_back(p5);
-            vertQueue.push_back(p6);
             vertQueue.push_back(p3);
+            vertQueue.push_back(p6);
 
             vertQueue.push_back(p4);
-            vertQueue.push_back(p6);
             vertQueue.push_back(p5);
+            vertQueue.push_back(p6);
         }
     }
 

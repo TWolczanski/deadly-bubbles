@@ -3,7 +3,7 @@
 in vec3 fragPos;
 in vec3 normal;
 
-out vec3 color;
+out vec4 color;
 
 struct PointLight {
     vec3 position;
@@ -64,7 +64,7 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 }
 
 void main(void) {
-    color = computePointLight(pointLight) + computePointLight(playerLight);
+    color = vec4(computePointLight(pointLight) + computePointLight(playerLight), 1.0);
     // color = computePointLight(pointLight);
     // color = computeDirectionalLight(directionalLight);
     // color = computeDirectionalLight(directionalLight) + computePointLight(pointLight);

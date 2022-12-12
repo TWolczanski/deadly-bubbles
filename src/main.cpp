@@ -52,6 +52,8 @@ void MyWin::ScrollCB(double xp, double yp) {
 void MyWin::MainLoop()
 {
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     fov = 45.0;
     viewport = 1;
@@ -115,7 +117,10 @@ void MyWin::MainLoop()
             view = player.getViewMatrix();
             projection = glm::perspective(glm::radians(fov), (float)wd / (float)ht, 0.0001f, 100.0f);
             aquarium.draw(view, projection, pointLight, directionalLight, playerLight, player.getPosition());
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_FRONT);
             (*bubbles).draw(view, projection, pointLight, directionalLight, playerLight, bubbleLights, player.getPosition(), now, now - last);
+            glDisable(GL_CULL_FACE);
         }
         else {
             view = outsideCamera.getViewMatrix();
@@ -123,9 +128,9 @@ void MyWin::MainLoop()
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);
             aquarium.draw(view, projection, pointLight, directionalLight, playerLight, outsideCamera.getPosition());
-            glDisable(GL_CULL_FACE);
             player.draw(view, projection, pointLight, directionalLight, outsideCamera.getPosition());
             (*bubbles).draw(view, projection, pointLight, directionalLight, playerLight, bubbleLights, outsideCamera.getPosition(), now, now - last);
+            glDisable(GL_CULL_FACE);
         }
         
         AGLErrors("main-afterdraw");

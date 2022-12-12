@@ -5,7 +5,7 @@ in vec3 fragPos;
 in vec3 normal;
 flat in int instance;
 
-out vec3 color;
+out vec4 color;
 
 struct PointLight {
     vec3 position;
@@ -68,7 +68,7 @@ vec3 computeDirectionalLight(DirectionalLight light) {
 }
 
 void main(void) {
-    color = computePointLight(pointLight) + computePointLight(playerLight);
+    color = vec4(computePointLight(pointLight) + computePointLight(playerLight), 0.5);
     
     // for (int i = 0; i < SPECIAL_BUBBLES_COUNT; i++) {
     //     if (special[i] < instance) {

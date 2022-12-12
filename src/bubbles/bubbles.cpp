@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <algorithm>
+#include <glm/gtx/string_cast.hpp>
 
 Bubbles::Bubbles(int count, float speed, float growthRate) : count(count), speed(speed), growthRate(growthRate), maxRadius(0.1) {
     setShaders();
@@ -114,11 +115,19 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, 
         }
         // only the bubbles that haven't made it to the top of the aquarium are drawn
         if (positions[i].y + radii[i] < AQUARIUM_SIZE_Y) {
-            colorBuffer[j] = colors[i];
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, positions[i]);
             model = glm::scale(model, glm::vec3(radii[i], radii[i], radii[i]));
-            modelBuffer[j] = model;
+            // find the appropriate location in the buffer based on the distance from the viewer
+            // (the bubbles are drawn from the farthest to the nearest)
+            int k = j - 1;
+            while (k >= 0 && glm::distance(viewPos, glm::vec3(modelBuffer[k][3])) < glm::distance(viewPos, positions[i])) {
+                modelBuffer[k + 1] = modelBuffer[k];
+                colorBuffer[k + 1] = colorBuffer[k];
+                k--;
+            }
+            modelBuffer[k + 1] = model;
+            colorBuffer[k + 1] = colors[i];
             j++;
         }
     }
