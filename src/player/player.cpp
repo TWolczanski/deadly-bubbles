@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Player::Player(float radius) : AGLDrawable(), radius(radius), Observer(glm::vec3(AQUARIUM_SIZE_X / 2, AQUARIUM_SIZE_Y / 2, radius)), movSpeed(0.4), rotSpeed(30.0), mouseX(-1), mouseY(-1), level(1)
+Player::Player() : AGLDrawable(), radius(PLAYER_RADIUS), Observer(glm::vec3(AQUARIUM_SIZE_X / 2, AQUARIUM_SIZE_Y / 2, PLAYER_RADIUS)), movSpeed(0.15), rotSpeed(30.0), mouseX(-1), mouseY(-1), level(1)
 {
     rotateY(180.0);
     setShaders();

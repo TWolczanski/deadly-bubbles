@@ -29,7 +29,7 @@ public:
     int level;
 
 public:
-    Player(float radius);
+    Player();
     ~Player();
     void handleInput(GLFWwindow *window, float timeDelta, Bubbles &bubbles);
     void draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, DirectionalLight directionalLight, glm::vec3 viewPos);

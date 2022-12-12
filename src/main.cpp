@@ -60,11 +60,11 @@ void MyWin::MainLoop()
 
     Aquarium aquarium;
 
-    Bubbles bubblesLevel1(20, 0.3, 0.02);
-    Bubbles bubblesLevel2(35, 0.5, 0.03);
+    Bubbles bubblesLevel1(20, 0.1, 0.01);
+    Bubbles bubblesLevel2(30, 0.2, 0.02);
     Bubbles *bubbles = &bubblesLevel1;
 
-    Player player(1.0 / 30.0);
+    Player player;
 
     Observer outsideCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     outsideCamera.rotateY(180.0 + 45.0);

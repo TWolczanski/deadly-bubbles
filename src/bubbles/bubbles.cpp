@@ -99,8 +99,9 @@ void Bubbles::draw(glm::mat4 view, glm::mat4 projection, PointLight pointLight, 
     bool created = false;
     if (positions[index].y + radii[index] >= AQUARIUM_SIZE_Y) {
         float r = ((float)rand() / RAND_MAX) * 0.02 + 0.005;
-        float x = ((float)rand() / (RAND_MAX / (AQUARIUM_SIZE_X - maxRadius - maxRadius))) + maxRadius;
-        float z = ((float)rand() / (RAND_MAX / (AQUARIUM_SIZE_Z - maxRadius - maxRadius))) + maxRadius;
+        float d = 2 * PLAYER_RADIUS + maxRadius;
+        float x = ((float)rand() / (RAND_MAX / (AQUARIUM_SIZE_X - d - d))) + d;
+        float z = ((float)rand() / (RAND_MAX / (AQUARIUM_SIZE_Z - d - d))) + d;
         positions[index] = glm::vec3(x, r, z);
         radii[index] = r;
         colors[index] = glm::vec3((float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX);
